@@ -1,0 +1,69 @@
+# ==========================
+# Python
+# ==========================
+backend/.venv/
+backend/venv/
+backend/__pycache__/
+backend/**/*.py[cod]
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.ruff_cache/
+backend/.coverage
+backend/htmlcov/
+
+# ==========================
+# Environment
+# ==========================
+.env
+.env.*
+!.env.example
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# VS Code
+# ==========================
+.vscode/
+
+# ==========================
+# JetBrains
+# ==========================
+.idea/
+
+# ==========================
+# macOS
+# ==========================
+.DS_Store
+
+# ==========================
+# Linux
+# ==========================
+*~
+
+# ==========================
+# Node / Next.js
+# ==========================
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.turbo/
+frontend/coverage/
+
+# ==========================
+# Build files
+# ==========================
+dist/
+build/
+
+# ==========================
+# Docker
+# ==========================
+*.pid
+
+# ==========================
+# Alembic
+# ==========================
+backend/alembic/versions/*.pyc
