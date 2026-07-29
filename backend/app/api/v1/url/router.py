@@ -1,7 +1,8 @@
 """
 URL CRUD endpoints.
 
-POST   /urls              — create a short URL (optional auth — associates owner if JWT present)
+POST   /urls              — create a short URL
+                           (optional auth — associates owner if JWT present)
 GET    /urls/{short_code} — get metadata (non-redirecting)
 DELETE /urls/{short_code} — delete a short URL
 """
@@ -14,7 +15,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db, get_optional_user, get_redis, rate_limit_create
 from app.models.user import User
-from app.schemas.url import ErrorResponse, URLCreateRequest, URLCreateResponse, URLMetaResponse
+from app.schemas.url import (
+    ErrorResponse,
+    URLCreateRequest,
+    URLCreateResponse,
+    URLMetaResponse,
+)
 from app.services.url import URLService
 
 router = APIRouter(prefix="/urls", tags=["urls"])

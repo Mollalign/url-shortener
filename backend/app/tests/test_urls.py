@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
-import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
@@ -47,7 +46,9 @@ async def mock_redis():
     redis = AsyncMock()
     redis.get = AsyncMock(side_effect=lambda k: store.get(k))
     redis.set = AsyncMock(side_effect=lambda k, v, **kw: store.update({k: v}))
-    redis.delete = AsyncMock(side_effect=lambda *keys: [store.pop(k, None) for k in keys])
+    redis.delete = AsyncMock(
+        side_effect=lambda *keys: [store.pop(k, None) for k in keys]
+    )
     redis.incr = AsyncMock(return_value=1)
     redis.expire = AsyncMock(return_value=True)
     redis.ping = AsyncMock(return_value=True)

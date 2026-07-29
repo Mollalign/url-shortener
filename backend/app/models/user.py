@@ -49,7 +49,7 @@ class User(BaseModel):
         nullable=False,
     )
 
-    urls: Mapped[list["URL"]] = relationship(
+    urls: Mapped[list[URL]] = relationship(
         back_populates="owner",
         cascade="all, delete-orphan",
     )

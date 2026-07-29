@@ -73,6 +73,6 @@ class URL(BaseModel):
         index=True,
     )
 
-    owner: Mapped["User | None"] = relationship(
+    owner: Mapped[User | None] = relationship(
         back_populates="urls",
     )

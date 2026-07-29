@@ -9,12 +9,11 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
-import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.api.deps import get_current_user, get_db, get_redis
+from app.api.deps import get_db, get_redis
 from app.db.base import Base
 from app.main import app
 
@@ -43,7 +42,9 @@ async def mock_redis():
     redis = AsyncMock()
     redis.get = AsyncMock(side_effect=lambda k: store.get(k))
     redis.set = AsyncMock(side_effect=lambda k, v, **kw: store.update({k: v}))
-    redis.delete = AsyncMock(side_effect=lambda *keys: [store.pop(k, None) for k in keys])
+    redis.delete = AsyncMock(
+        side_effect=lambda *keys: [store.pop(k, None) for k in keys]
+    )
     redis.incr = AsyncMock(return_value=1)
     redis.expire = AsyncMock(return_value=True)
     redis.ping = AsyncMock(return_value=True)
@@ -229,7 +230,11 @@ class TestUpdateMe:
         # Register second user
         await client.post(
             "/api/v1/auth/register",
-            json={"email": "second@example.com", "username": "seconduser", "password": "Secure123"},
+            json={
+                "email": "second@example.com",
+                "username": "seconduser",
+                "password": "Secure123",
+            },
         )
         token = await _register_and_get_token(client)
         resp = await client.patch(

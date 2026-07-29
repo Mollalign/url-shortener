@@ -64,15 +64,21 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
 
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
-    access_token_expire_minutes: int = Field(default=60, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    access_token_expire_minutes: int = Field(
+        default=60, alias="ACCESS_TOKEN_EXPIRE_MINUTES"
+    )
 
     # ------------------------------------------------------------------
     # Rate limiting
     # ------------------------------------------------------------------
 
     rate_limit_enabled: bool = Field(default=True, alias="RATE_LIMIT_ENABLED")
-    rate_limit_create_per_minute: int = Field(default=60, alias="RATE_LIMIT_CREATE_PER_MINUTE")
-    rate_limit_redirect_per_minute: int = Field(default=600, alias="RATE_LIMIT_REDIRECT_PER_MINUTE")
+    rate_limit_create_per_minute: int = Field(
+        default=60, alias="RATE_LIMIT_CREATE_PER_MINUTE"
+    )
+    rate_limit_redirect_per_minute: int = Field(
+        default=600, alias="RATE_LIMIT_REDIRECT_PER_MINUTE"
+    )
 
     # ------------------------------------------------------------------
     # Logging
@@ -90,7 +96,7 @@ class Settings(BaseSettings):
         return self.environment == "production"
 
     @model_validator(mode="after")
-    def _configure(self) -> "Settings":
+    def _configure(self) -> Settings:
         if not self.database_url:
             raise ValueError("DATABASE_URL is required.")
         if self.environment == "development":
@@ -98,7 +104,7 @@ class Settings(BaseSettings):
         return self
 
     @model_validator(mode="after")
-    def _validate_production_security(self) -> "Settings":
+    def _validate_production_security(self) -> Settings:
         if not self.is_production:
             return self
         if "change-me-in-production" in self.secret_key:

@@ -4,7 +4,7 @@ Security utilities: password hashing and JWT tokens.
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 import bcrypt
@@ -12,7 +12,6 @@ import jwt
 from fastapi import HTTPException, status
 
 from app.core.config import get_settings
-
 
 # ---------------------------------------------------------------------------
 # Password hashing
@@ -56,7 +55,7 @@ def create_access_token(user_id: UUID) -> str:
       type — "access" (guards against using refresh tokens as access tokens)
     """
     settings = get_settings()
-    expire = datetime.now(timezone.utc) + timedelta(
+    expire = datetime.now(UTC) + timedelta(
         minutes=settings.access_token_expire_minutes
     )
     payload = {
@@ -82,9 +81,9 @@ def decode_access_token(token: str) -> str:
             algorithms=[settings.jwt_algorithm],
         )
     except jwt.ExpiredSignatureError:
-        raise _EXPIRED_EXCEPTION
+        raise _EXPIRED_EXCEPTION from None
     except jwt.InvalidTokenError:
-        raise _CREDENTIALS_EXCEPTION
+        raise _CREDENTIALS_EXCEPTION from None
 
     if payload.get("type") != "access":
         raise _CREDENTIALS_EXCEPTION

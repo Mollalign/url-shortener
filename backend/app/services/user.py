@@ -8,7 +8,11 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.common.exceptions import BadRequestException, ConflictException, NotFoundException
+from app.common.exceptions import (
+    BadRequestException,
+    ConflictException,
+    NotFoundException,
+)
 from app.core.logging import get_logger
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models.user import User

@@ -56,6 +56,6 @@ async def redis_healthcheck() -> bool:
     try:
         client = get_redis()
         return bool(await client.ping())
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         log.warning("redis.healthcheck_failed", error=str(exc))
         return False

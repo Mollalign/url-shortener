@@ -10,7 +10,7 @@ Responsibilities:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import UUID
 
 from redis.asyncio import Redis
@@ -89,7 +89,7 @@ class URLService:
         if not url.is_active:
             raise GoneException(f"Short code '{short_code}' is no longer active.")
 
-        if url.expires_at and url.expires_at < datetime.now(timezone.utc):
+        if url.expires_at and url.expires_at < datetime.now(UTC):
             raise GoneException(f"Short code '{short_code}' has expired.")
 
         # Populate cache
@@ -155,5 +155,5 @@ class URLService:
         """TTL in seconds for Redis. Falls back to config default."""
         if expires_at is None:
             return self._settings.cache_ttl_seconds
-        remaining = int((expires_at - datetime.now(timezone.utc)).total_seconds())
+        remaining = int((expires_at - datetime.now(UTC)).total_seconds())
         return max(1, min(remaining, self._settings.cache_ttl_seconds))

@@ -16,9 +16,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.db.session import dispose_engine, init_engine
 from app.core.logging import configure_logging, get_logger
 from app.core.redis import dispose_redis, init_redis
+from app.db.session import dispose_engine, init_engine
 
 
 @asynccontextmanager

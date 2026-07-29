@@ -58,14 +58,20 @@ def create_app() -> FastAPI:
     async def not_found_handler(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(
             status_code=404,
-            content={"error": "not_found", "message": "The requested resource was not found."},
+            content={
+                "error": "not_found",
+                "message": "The requested resource was not found.",
+            },
         )
 
     @app.exception_handler(410)
     async def gone_handler(request: Request, exc: Exception) -> JSONResponse:
         return JSONResponse(
             status_code=410,
-            content={"error": "gone", "message": "This short URL has expired or been deleted."},
+            content={
+                "error": "gone",
+                "message": "This short URL has expired or been deleted.",
+            },
         )
 
     # ------------------------------------------------------------------

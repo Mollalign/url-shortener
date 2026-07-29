@@ -5,11 +5,10 @@ Pydantic schemas for URL operations.
 from __future__ import annotations
 
 import re
-from datetime import datetime
+from datetime import UTC, datetime
 from urllib.parse import urlparse
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
-
 
 # ---------------------------------------------------------------------------
 # Requests
@@ -43,7 +42,8 @@ class URLCreateRequest(BaseModel):
             return v
         if not re.match(r"^[a-zA-Z0-9_-]+$", v):
             raise ValueError(
-                "Custom alias may only contain letters, digits, hyphens, and underscores."
+                "Custom alias may only contain letters, digits,"
+                " hyphens, and underscores."
             )
         if not (3 <= len(v) <= 50):
             raise ValueError("Custom alias must be between 3 and 50 characters.")
@@ -54,8 +54,7 @@ class URLCreateRequest(BaseModel):
     def validate_expiration_date(cls, v: datetime | None) -> datetime | None:
         if v is None:
             return v
-        from datetime import timezone
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         if v.tzinfo is None:
             raise ValueError("expiration_date must be timezone-aware (UTC).")
         if v <= now:

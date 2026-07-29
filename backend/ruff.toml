@@ -1,3 +1,18 @@
 line-length = 88
-
 target-version = "py312"
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "RUF"]
+ignore = [
+    # FastAPI explicitly documents Depends() in function signatures as the
+    # correct pattern — suppressing this project-wide.
+    "B008",
+    # Pydantic v2 Generic[T] style works fine; UP046/UP047 are cosmetic.
+    "UP046",
+    "UP047",
+]
+
+[lint.per-file-ignores]
+# Tests are allowed to use broad exception catching and unused imports during
+# fixture setup.
+"app/tests/*" = ["BLE001", "S101"]

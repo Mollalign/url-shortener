@@ -12,8 +12,8 @@ from sqlalchemy import text
 
 from app.common.response import HealthResponse
 from app.core.config import get_settings
-from app.db.session import get_sessionmaker
 from app.core.redis import redis_healthcheck
+from app.db.session import get_sessionmaker
 
 router = APIRouter(prefix="/health", tags=["health"])
 
@@ -40,7 +40,7 @@ async def readiness() -> HealthResponse:
         async with sm() as session:
             await session.execute(text("SELECT 1"))
         db_ok = True
-    except Exception:  # noqa: BLE001 — readiness must not raise
+    except Exception:
         db_ok = False
 
     redis_ok = await redis_healthcheck()

@@ -103,7 +103,7 @@ async def get_optional_user(
         user = await repo.get_by_id(UUID(user_id_str))
         if user and user.is_active:
             return user
-    except Exception:  # noqa: BLE001 — optional auth must never raise
+    except Exception:
         pass
     return None
 

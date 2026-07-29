@@ -1,9 +1,12 @@
 import os
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from alembic import context
+# App imports must come after Alembic config setup; suppress E402.
+import app.models  # noqa: F401  — registers URL, User with Base.metadata
+from app.db.base import Base
 
 # ---------------------------------------------------------------------------
 # Alembic config object
@@ -12,12 +15,6 @@ config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-
-# ---------------------------------------------------------------------------
-# Import ALL models so their metadata is registered with Base
-# ---------------------------------------------------------------------------
-from app.db.base import Base  # noqa: E402
-import app.models  # noqa: E402, F401  — registers URL, User
 
 target_metadata = Base.metadata
 
@@ -28,7 +25,10 @@ target_metadata = Base.metadata
 # ---------------------------------------------------------------------------
 
 def get_sync_url() -> str:
-    url = os.environ.get("DATABASE_URL", config.get_main_option("sqlalchemy.url", ""))
+    url = os.environ.get(
+        "DATABASE_URL",
+        config.get_main_option("sqlalchemy.url", ""),
+    )
     # Alembic runs sync migrations; replace async driver with sync psycopg
     return (
         url
